@@ -51,6 +51,7 @@ public class StickerTest {
         System.out.println();
 
         int[] ResultArray = new int[numberOfListElements];
+        boolean noStikers = false;
         boolean moreStikers = false;
 
             for (int i = 0; i < numberOfListElements; i++) {
@@ -66,11 +67,18 @@ public class StickerTest {
                 System.out.println(items.get(i));
                 System.out.println();
              }
+             else if (ResultArray[i]==0) {
+                noStikers=true;
+                System.out.println("Item "+i+" has no stickers! - "+ResultArray[i]);
+                System.out.println(items.get(i));
+                System.out.println();
+            }
             }
 
-            if (moreStikers==true) {
-            fail("Some Item has has FEW stickers!");
-        }
+            if (moreStikers==true || noStikers==true) {
+            fail("Some Item has has FEW or NO stickers!");
+            }
+
         }
 
 
