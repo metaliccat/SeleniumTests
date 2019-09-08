@@ -28,7 +28,7 @@ public class MenuTest {
     }
 
     @Test
-    public void myFirstTest() {
+    public void MenuTest() {
         this.driver.get("http://localhost/litecart/admin/");
         this.driver.findElement(By.name("username")).sendKeys(new CharSequence[]{"admin"});
         this.driver.findElement(By.name("password")).sendKeys(new CharSequence[]{"admin"});
