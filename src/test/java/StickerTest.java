@@ -17,17 +17,26 @@ public class StickerTest {
 
 
 
-    private int isStikerPresent(WebElement item, int i) {
-        int numberOfStikers=0;
+    private boolean isOneSticker(WebElement product) {
         try {
-            List<WebElement> stikers=item.findElements(By.cssSelector("div.sticker"));
-            numberOfStikers = stikers.size();
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
+            List<WebElement> stikers=product.findElements(By.cssSelector("div.sticker"));
+            int numberOfStikers = stikers.size();
 
-        return numberOfStikers;
+            if (numberOfStikers==1) {return true;}
+            else { return false;}
+
+            }
+                catch (Exception e) {
+            System.out.println(e.getMessage());
+            return false;
+                }
+
     }
+
+    private String ProductName(WebElement product) {
+       return (product.findElement(By.cssSelector("div.name")).getText());
+    }
+
 
 
 
@@ -44,49 +53,40 @@ public class StickerTest {
         this.driver.get("http://localhost/litecart/");
         this.wait.until(ExpectedConditions.urlToBe("http://localhost/litecart/en/"));
 
-        List<WebElement> items=driver.findElements(By.cssSelector("div.content  a.link"));
-        int numberOfListElements = items.size();
+        List<WebElement> products=driver.findElements(By.cssSelector("div.content  li.product"));
+        int numberOfListElements = products.size();
 
-        System.out.println("There are " + numberOfListElements  + " items on the page");
-        System.out.println();
+        boolean error=false;
+        int n=0;
+        String Name;
 
-        int[] ResultArray = new int[numberOfListElements];
-        boolean noStikers = false;
-        boolean moreStikers = false;
 
             for (int i = 0; i < numberOfListElements; i++) {
-                ResultArray[i]=isStikerPresent(items.get(i), i);
-                System.out.println("Item "+i+": Number of stickers is "+ResultArray[i]);
+                Name=ProductName(products.get(i));
+
+                if (isOneSticker(products.get(i)) == true)
+                {
+                    System.out.println("The product "+Name+" has 1 sticker!");
+                    System.out.println();
                 }
-        System.out.println();
 
-        for (int i = 0; i < numberOfListElements; i++) {
-            if (ResultArray[i]>1) {
-                moreStikers=true;
-                System.out.println("Item "+i+" has few stickers! - "+ResultArray[i]);
-                System.out.println(items.get(i));
-                System.out.println();
-             }
-             else if (ResultArray[i]==0) {
-                noStikers=true;
-                System.out.println("Item "+i+" has no stickers! - "+ResultArray[i]);
-                System.out.println(items.get(i));
-                System.out.println();
-            }
+                else
+                {
+                    error=true;
+                    n++;
+
+                    System.out.println("The product "+Name+" has no/few stickers!");
+                    System.out.println();
+
+                }
             }
 
-            if (moreStikers==true || noStikers==true) {
-            fail("Some Item has has FEW or NO stickers!");
+        System.out.println("There are " + numberOfListElements  + " products on the page");
+            if (error==true) {
+            fail(n+" products have no/few stickers!");
             }
 
         }
-
-
-
-
-
-
-
 
     @After
     public void stop() {
